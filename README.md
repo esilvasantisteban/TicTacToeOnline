@@ -19,5 +19,5 @@
 EXTRAS
 - Nickname for players
 - Points per won game for each player
-- Local Game
+- Local Game // DONE
 - Online Game

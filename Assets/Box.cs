@@ -6,8 +6,8 @@ public class Box : MonoBehaviour
 {
     public enum BoxContent
     {
-        Cross,
-        Circle,
+        Cross = 0,
+        Circle = 1,
         Empty
     }
 
