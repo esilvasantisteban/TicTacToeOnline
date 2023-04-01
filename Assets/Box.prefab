@@ -53,8 +53,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 3692672556240807988}
   contentImage: {fileID: 8129941858722348814}
-  crossVisual: {fileID: 21300000, guid: 68e5a78013e33f247822a837e55b0ab4, type: 3}
-  circleVisual: {fileID: 21300000, guid: 6a7ac9e8c26b12440bf2b1da2ca97794, type: 3}
+  crossVisual: {fileID: 21300000, guid: 9f009c2d4898aa24eb0a73aaa7d8d617, type: 3}
+  circleVisual: {fileID: 21300000, guid: 8a9aaec9620b69941b21bd95df50a228, type: 3}
 --- !u!114 &3692672556240807988
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -86,10 +86,14 @@ public class Board : NetworkBehaviour
             isPlayerTurn = false;
         }
 
-        Player winner = GetWinner();
-        if (winner != Player.None)
+        Winner winner = GetWinner();
+        if (winner != Winner.None)
         {
-            print("There is a winner!" + ((winner == Player.Cross)? "Cruz": "Circulo"));
+            if (winner != Winner.Draw)
+                print("There is a winner!" + ((winner == Winner.Cross) ? "Cruz" : "Circulo"));
+            else
+                print("It's a draw");
+
             restartBtn.SetActive(true);
             SendWinnerClientRpc(winner);
         }
@@ -116,30 +120,40 @@ public class Board : NetworkBehaviour
         return true;
     }
 
-    private Player GetWinner ()
+    private Winner GetWinner ()
     {
         List<Box> b = BoxList;
 
-        if (b[0].Content == b[1].Content && b[1].Content == b[2].Content) return (Player)b[0].Content;
-        if (b[3].Content == b[4].Content && b[5].Content == b[3].Content) return (Player)b[3].Content;
-        if (b[6].Content == b[7].Content && b[8].Content == b[6].Content) return (Player)b[6].Content;
+        if (b[0].Content == b[1].Content && b[1].Content == b[2].Content) return (Winner)b[0].Content;
+        if (b[3].Content == b[4].Content && b[5].Content == b[3].Content) return (Winner)b[3].Content;
+        if (b[6].Content == b[7].Content && b[8].Content == b[6].Content) return (Winner)b[6].Content;
 
-        if (b[0].Content == b[3].Content && b[6].Content == b[0].Content) return (Player)b[0].Content;
-        if (b[1].Content == b[4].Content && b[7].Content == b[1].Content) return (Player)b[1].Content;
-        if (b[2].Content == b[5].Content && b[8].Content == b[2].Content) return (Player)b[2].Content;
+        if (b[0].Content == b[3].Content && b[6].Content == b[0].Content) return (Winner)b[0].Content;
+        if (b[1].Content == b[4].Content && b[7].Content == b[1].Content) return (Winner)b[1].Content;
+        if (b[2].Content == b[5].Content && b[8].Content == b[2].Content) return (Winner)b[2].Content;
        
-        if (b[0].Content == b[4].Content && b[8].Content == b[0].Content) return (Player)b[0].Content;
-        if (b[2].Content == b[4].Content && b[6].Content == b[2].Content) return (Player)b[2].Content;
+        if (b[0].Content == b[4].Content && b[8].Content == b[0].Content) return (Winner)b[0].Content;
+        if (b[2].Content == b[4].Content && b[6].Content == b[2].Content) return (Winner)b[2].Content;
 
-        return Player.None;
+        int emptyTiles = 0;
+        foreach (Box box in BoxList)
+            if (box.Content == Box.BoxContent.Empty)
+                emptyTiles++;
+        
+        if (emptyTiles < 1) return Winner.Draw;
+
+        return Winner.None;
     }
 
     [ClientRpc]
-    private void SendWinnerClientRpc (Player winner)
+    private void SendWinnerClientRpc (Winner winner)
     {
         string message;
-        if (thisPlayer == winner) message = "Felicidades! Ganaste";
+
+        if (winner == Winner.Draw) message = "Es un empate!";
+        else if (thisPlayer == (Player)winner) message = "Felicidades! Ganaste";
         else message = "Lástima. Has perdido";
+
         DisplayMessage(message);
     }
 
@@ -160,6 +174,13 @@ public enum Player
 {
     Cross = Box.BoxContent.Cross,
     Circle = Box.BoxContent.Circle,
-    Draw,
     None
+}
+
+public enum Winner
+{
+    Cross = Player.Cross,
+    Circle = Player.Circle,
+    None = Player.None,
+    Draw
 }
