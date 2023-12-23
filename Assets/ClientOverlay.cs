@@ -19,7 +19,6 @@ public class ClientOverlay : MonoBehaviour
         {
             string address = inputField.text;
             address = address.Substring(0, 12);
-            print(address.Length);
             transport.ConnectionData.Address = address;
             NetworkManager.Singleton.StartClient();
             gameObject.SetActive(false);
